@@ -2,9 +2,11 @@
 
 ;; Copyright (C) 1987, 1989 Kyle E. Jones
 ;; Copyright (C) 1991, 93, 96, 2000 Noah S. Friedman
+;; Copyright (C) 2015 Heikki Lehväslaiho
 
 ;; Author: Kyle E. Jones <kyle@uunet.uu.net>
 ;;         Noah Friedman <friedman@splode.com>
+;;         Heikki Lehväslaiho  <heikki.lehvaslaiho@gmail.com>
 ;; Maintainer: friedman@splode.com
 
 ;; $Id: vkill.el,v 1.7 2002/03/20 18:48:18 friedman Exp $
@@ -33,6 +35,10 @@
 
 ;;; ChangeLog:
 
+;;  2015-06-05  Heikki Lehväslaiho  <heikki.lehvaslaiho@gmail.com>
+;;
+;;      * vkill.el (vkill, list-unix-processes) autoload automatically
+;;
 ;; 2002-03-20  Noah Friedman  <friedman@splode.com>
 ;;
 ;; 	* vkill.el (vkill-ps-command): Convert user-uid to string for concat.
@@ -161,6 +167,7 @@ operating systems.")
 
 (defun vkill-abs (n) (if (< n 0) (- n) n))
 
+;;;###autoload
 (defun vkill (&optional list)
   "Mode for displaying all UNIX processes owned by the current user
 \(all the processes on the system if invoked by the superuser) and allowing
@@ -215,6 +222,7 @@ Commands:
 (fset 'vkill-mode 'vkill)
 (put 'vkill-mode 'mode-class 'special)
 
+;;;###autoload
 (defun list-unix-processes (&optional activate)
   "List UNIX processes owned by the current user using the ps(1) command.
 If run by the superuser, all processes are listed.  The buffer used to
