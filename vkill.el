@@ -26,15 +26,17 @@
 ;; mvoe around in it marking processes to be sent a signal.  Type a `?'
 ;; in the Process Info buffer for more help.
 ;;
-;; The commands vkill and list-unix-processes are the package entry points.
-;;
-;; To autoload, use
-;;     (autoload 'vkill "vkill" nil t)
-;;     (autoload 'list-unix-processes "vkill" nil t)
-;; in your .emacs file.
+;; The commands vkill and list-unix-processes are the autoloaded
+;; package entry points.
 
 ;;; ChangeLog:
 
+;;  2015-06-05  Heikki Lehväslaiho  <heikki.lehvaslaiho@gmail.com>
+;;
+;;      * vkill.el fix compiler warnings
+;;      goto-line: use forward-line instead
+;;      next-line: use forward-line instead
+;;
 ;;  2015-06-05  Heikki Lehväslaiho  <heikki.lehvaslaiho@gmail.com>
 ;;
 ;;      * vkill.el (vkill, list-unix-processes) autoload automatically
@@ -212,7 +214,8 @@ Commands:
     (if (or new list)
 	(progn
 	  (vkill-update-process-info list)
-	  (goto-line 2)))
+          (goto-char (point-min))
+          (forward-line 1)))
 
     (if list
 	(display-buffer vkill-buffer)
@@ -248,7 +251,7 @@ corrseponding processes.  A negative COUNT means move backwards."
 	    (insert "*")
 	    (delete-char 1)))
       (forward-line direction)
-      (next-line 0) ; move to goal column.
+      (forward-line 0) ; move to goal column.
       (vkill-decrement count))))
 
 (defun vkill-mark-all-processes ()
@@ -256,7 +259,8 @@ corrseponding processes.  A negative COUNT means move backwards."
   (interactive)
   (save-excursion
     (let (buffer-read-only)
-      (goto-line 2)
+      (goto-char (point-min))
+      (forward-line 1)
       (while (not (eobp))
 	(insert "*")
 	(delete-char 1)
@@ -325,7 +329,8 @@ processes."
       (and (boundp 'vkill-command-column-regexp)
            (re-search-forward vkill-command-column-regexp nil t)
            (setq goal-column (1- (match-beginning 0)))))
-    (goto-line 2)
+    (goto-char (point-min))
+    (forward-line 1)
     (sort-numeric-fields 2 (point) (point-max)))
   (or quietly (input-pending-p)
       (message "Updating process information... done.")))
